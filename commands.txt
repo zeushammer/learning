@@ -1,0 +1,198 @@
+    1  sudo apt-get update
+    2  sudo apt-get install firefox
+    3  sudo apt-get install git
+    4  mkdir code
+    5  git clone https://github.com/LazyVim/starter ~/.config/nvim
+    6  ls
+    7  pwd
+    8  rm -rf ~/.config/nvim/.git
+    9  nvim
+   10  sudo apt install neovim
+   11  # required
+   12  mv ~/.config/nvim{,.bak}
+   13  # optional but recommended
+   14  mv ~/.local/share/nvim{,.bak}
+   15  mv ~/.local/state/nvim{,.bak}
+   16  mv ~/.cache/nvim{,.bak}
+   17  git clone https://github.com/LazyVim/starter ~/.config/nvim
+   18  rm -rf ~/.config/nvim/.git
+   19  nvim
+   20  sudo apt remove neovim
+   21  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+   22  sudo rm -rf /opt/nvim-linux-x86_64
+   23  sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+   24  vi ~/.bashrc
+   25  [200~# Create symbolic links to add kitty and kitten to PATH (assuming ~/.local/bin is in
+   26  # your system-wide PATH)
+   27  ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/
+   28  # Place the kitty.desktop file somewhere it can be found by the OS
+   29  cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
+   30  # If you want to open text files and images in kitty via your file manager also add the kitty-open.desktop file
+   31  cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
+   32  # Update the paths to the kitty and its icon in the kitty desktop file(s)
+   33  sed -i "s|Icon=kitty|Icon=$(readlink -f ~)/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+   34  sed -i "s|Exec=kitty|Exec=$(readlink -f ~)/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+   35  # Make xdg-terminal-exec (and hence desktop environments that support it use kitty)
+   36  echo 'kitty.desktop' > ~/.config/xdg-terminals.list~
+   37  nvim
+   38  curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+   39  snap install ghostty --classic
+   40  go version
+   41  nvim
+   42  sudo apt install build-essential
+   43  cd Downloads/
+   44  rm -rf /usr/local/go && tar -C /usr/local -xzf go1.26.1.linux-amd64.tar.gz
+   45  sudo rm -rf /usr/local/go && tar -C /usr/local -xzf go1.26.1.linux-amd64.tar.gz
+   46  ls
+   47  sudo rm -rf /usr/local/go
+   48  sudo su
+   49  vi ~/.bashrc
+   50  go version
+   51  sudo apt install lazygit
+   52  sudo apt-get install lazygit
+   53  LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+   54  curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+   55  tar xf lazygit.tar.gz lazygit
+   56  sudo install lazygit -D -t /usr/local/bin/
+   57  lazygit --version
+   58  (type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) 	&& sudo mkdir -p -m 755 /etc/apt/keyrings 	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg 	&& cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null 	&& sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg 	&& sudo mkdir -p -m 755 /etc/apt/sources.list.d 	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null 	&& sudo apt update 	&& sudo apt install gh -y
+   59  sudo snap install falkon
+   60  gh auth login
+   61  ls
+   62  rm lazygit.tar.gz 
+   63  cd code/
+   64  ls
+   65  gh repo clone zeushammer/learning
+   66  cd learning/
+   67  ls
+   68  ll
+   69  nvim
+   70  nvim main.go 
+   71  nvim .
+   72  sudo apt-get install kind
+   73  go install sigs.k8s.io/kind@v0.31.0
+   74  kind
+   75  go env GOPATH
+   76  ls -l /home/zeushammer/go/bin/
+   77  echo $GOAPTH
+   78  echo $GOPATH
+   79  vi ~/.bashrc
+   80  source ~/.bashrc
+   81  kind
+   82  brew install
+   83  docker
+   84  sudo apt install ca-certificates curl gnupg
+   85  sudo install -m 0755 -d /etc/apt/keyrings
+   86  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+   87  sudo chmod a+r /etc/apt/keyrings/docker.gpg
+   88  echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+   89    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   90  sudo apt update
+   91  apt-cache policy docker-ce
+   92  sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+   93  Types: deb
+   94  URIs: https://download.docker.com/linux/ubuntu
+   95  Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+   96  Components: stable
+   97  Signed-By: /usr/share/keyrings/docker.gpg
+   98  EOF
+   99  sudo apt update
+  100  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker.gpg
+  101  sudo chmod a+r /usr/share/keyrings/docker.gpg
+  102  sudo apt update
+  103  sudo su
+  104  sudo apt update
+  105  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker.gpg
+  106  sudo chmod a+r /usr/share/keyrings/docker.gpg
+  107  lsb_release
+  108  # Add Docker's official GPG key:
+  109  sudo apt update
+  110  sudo apt install ca-certificates curl
+  111  sudo install -m 0755 -d /etc/apt/keyrings
+  112  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  113  sudo chmod a+r /etc/apt/keyrings/docker.asc
+  114  # Add the repository to Apt sources:
+  115  sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+  116  Types: deb
+  117  URIs: https://download.docker.com/linux/ubuntu
+  118  Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+  119  Components: stable
+  120  Signed-By: /etc/apt/keyrings/docker.asc
+  121  EOF
+  122  sudo apt update
+  123  sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  124  sudo systemctl status docker
+  125  sudo docker run hello-world
+  126  sudo groupadd docker
+  127  sudo usermod -aG docker $USER
+  128  newgrp docker
+  129  docker run hello-world
+  130  curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  131  VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+  132  curl -LO "https://storage.googleapis.com/kubernetes-release/release/${VERSION}/bin/linux/amd64/kubectl"
+  133  chmod +x./kubectl
+  134  chmod +x ./kubectl
+  135  sudo mv ./kubectl /usr/local/bin/kubectl
+  136  kubectl --version
+  137  kubectl -version
+  138  kubectl
+  139  sudo apt-get install helm
+  140  curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+  141  chmod 700 get_helm.sh
+  142  ./get_helm.sh
+  143  helm
+  144  nvim .
+  145  sudo snap install k8s --classic
+  146  kind create cluster --name arena
+  147  docker
+  148  sudo systemctl start docker
+  149  sudo systemctl status
+  150  docker run hello-world
+  151  sudo docker run hello-world
+  152  sudo groupadd docker
+  153  sudo usermod -aG docker $USER
+  154  docker run hello-world
+  155  kind create cluster --name arena
+  156  go install github.com/jesseduffield/lazydocker@latest
+  157  vi ~/.bashrc
+  158  lazydocker
+  159  kubectl get nodes
+  160  kubectl get pods -A
+  161  snap install k9s --devmode
+  162  k9s version
+  163  [200~wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb && sudo apt install ./k9s_linux_amd64.deb && rm k9s_linux_amd64.deb~
+  164  wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb && sudo apt install ./k9s_linux_amd64.deb && rm k9s_linux_amd64.deb~
+  165  k9s
+  166  kubectl get pods -A
+  167  k9s --version
+  168  k9s -A
+  169  helm repo add agones https://agones.dev/chart/stable
+  170  help repo update
+  171  helm repo update
+  172  helm install agones agones/agones
+  173  kubectl get pods -n agones-system
+  174  kubectl get pods -A
+  175  ls
+  176  rm k9s_linux_amd64.deb 
+  177  ls
+  178  cd code/
+  179  ls
+  180  cd learning/
+  181  ls
+  182  docker build -t arena-game-server .
+  183  kind load docker-image arena-game-server
+  184  kind
+  185  kind load docker-image arena-game-server:v
+  186  kind load docker-image arena-game-server:v3
+  187  kind load docker-image arena-game-server:latest
+  188  kind get clusters
+  189  docker images | grep arena-game-server
+  190  kind load docker-image arena-game-server:latest --name arena
+  191  kubectl apply -f deploy/agones/gamerserver.yaml
+  192  ls -l
+  193  cd deploy/agones/
+  194  ls
+  195  cd ..
+  196  kubectl apply -f deploy/agones/gameserver.yaml
+  197  history
+  198  history > commands.txt
