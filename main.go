@@ -3,21 +3,28 @@ package main
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"os"
+	"time"
 
-	playGo "learning/game"
+	"learning/internal/handlers"
 	"learning/internal/middleware"
-	"learning/internal/utils"
+	"learning/internal/models"
+	"learning/internal/workers"
 
 	"learning/internal/logger"
 	"learning/internal/requestctx"
+
+	sdk "agones.dev/agones/sdks/go"
 )
 
 // docker run <container> command args
 // go run main.go command args
 
-var SERVERPORT = "8080"
+var SERVERPORT = "1337"
+
+var matchQueue = make(chan models.MatchRequest, 100)
 
 func main() {
 
@@ -34,11 +41,16 @@ func main() {
 
 	// Setup the mux
 	mux := http.NewServeMux()
-	server := NewGameServer()
 
-	mux.HandleFunc("GET /player", server.game.Player)
-	mux.HandleFunc("GET /queue", server.game.Queue)
-	mux.HandleFunc("GET /match/{id}", server.game.MatchById)
+	handlers.Queue = matchQueue
+
+	//mux.HandleFunc("GET /player", server.game.Player)
+	mux.HandleFunc("POST /queue", handlers.QueueHandler)
+	//mux.HandleFunc("GET /match/{id}", server.game.MatchById)
+
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("game server ready"))
+	})
 
 	// Define the pipeline
 	// Top-to-Bottom Readability: The order in the slice is the order the request hits the server.
@@ -58,8 +70,61 @@ func main() {
 
 	logger.Info(ctx, "Server starting on %s", SERVERPORT)
 
+	// queue where players enter matchmaking
+	matchQueue := make(chan models.MatchRequest, 100)
+
+	// channel where completed matches appear
+	matchResults := make(chan models.Match, 100)
+
+	// give the HTTP handler access to the queue
+	handlers.Queue = matchQueue
+
+	// start worker pool
+	workers.StartMatchmaker(
+		matchQueue,   // input queue
+		matchResults, // output matches
+	)
+
+	// listen for match results
+	go func() {
+
+		for match := range matchResults {
+
+			log.Printf(
+				"match created %s players=%v",
+				match.ID,
+				match.Players,
+			)
+
+			// later this is where you would allocate
+			// a game server with Agones
+		}
+
+	}()
+
+	// connect to Agones
+	s, err := sdk.NewSDK()
+	if err != nil {
+		logger.Error(ctx, err, "Could not connect to Agones SDK")
+	}
+
+	// tell Agones this server is ready to accept players
+	if err := s.Ready(); err != nil {
+		logger.Error(ctx, err, "Cloud not mark Ready")
+	}
+
+	// start health pings
+	go func() {
+		for {
+			if err := s.Health(); err != nil {
+				logger.Error(ctx, err, "health ping failed")
+			}
+			time.Sleep(2 * time.Second)
+		}
+	}()
+
 	// Wrap ListenAndServer
-	err := http.ListenAndServe("localhost:"+SERVERPORT, handler)
+	err = http.ListenAndServe(":"+SERVERPORT, handler)
 
 	if err != nil {
 		logger.Error(ctx, err, "Server failed to start or shut down unexpectedly")
@@ -67,14 +132,4 @@ func main() {
 		os.Exit(1)
 	}
 
-}
-
-type gameServer struct {
-	game      *playGo.Game
-	multitool utils.Leatherman
-}
-
-func NewGameServer() *gameServer {
-	ticTacGame := playGo.New()
-	return &gameServer{game: ticTacGame}
 }

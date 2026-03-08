@@ -1,0 +1,15 @@
+apiVersion: agones.dev/v1
+kind: GameServer
+metadata:
+  name: arena-server
+spec:
+  ports:
+  - name: default
+    portPolicy: Dynamic
+    containerPort: 8080
+  template:
+    spec:
+      containers:
+      - name: arena-game-server
+        image: arena-game-server:v3
+        imagePullPolicy: Never
