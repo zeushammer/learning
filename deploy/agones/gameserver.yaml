@@ -11,5 +11,5 @@ spec:
     spec:
       containers:
       - name: arena-game-server
-        image: arena-game-server:v3
+        image: arena-game-server:lastest
         imagePullPolicy: Never

@@ -64,6 +64,8 @@ helm repo add agones https://agones.dev/chart/stable
 helm repo update
 helm install agones agones/agones --namespace agones-system --create-namespace
 
+# Update the storage limits to run locally
+kubectl set resources deployment agones-controller -n default --limits=ephemeral-storage=500Mi --requests=ephemeral-storage=100Mi
 ```
 
 ### 3. Build & Deploy
