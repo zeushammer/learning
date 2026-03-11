@@ -13,10 +13,6 @@ Backed allocats a game server using Agones
 
 ---
 
-## 🚀 Get Started
-
-Follow these steps to set up your local development environment from scratch and deploy the game server.
-
 ### 1. Install Toolchain
 
 Install the core dependencies: **Go**, **Docker**, **Kubectl**, and **Kind**.
@@ -83,19 +79,4 @@ kind load docker-image arena-game-server:latest --name arena
 kubectl apply -f deploy/agones/gameserver.yaml
 
 ```
-
-### 4. Development Tools (Optional)
-
-For a better DX (Developer Experience), you can install these terminal UI tools:
-
-* **k9s**: `wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb && sudo apt install ./k9s_linux_amd64.deb`
-* **lazydocker**: `go install github.com/jesseduffield/lazydocker@latest`
-
 ---
-
-### Important Notes:
-
-* **Post-Install:** Remember to restart your terminal or run `newgrp docker` after the Docker installation so you don't have to use `sudo` for every command.
-* **Go Path:** The instructions above ensure your `GOBIN` is in your path so that `kind` and `lazydocker` work immediately.
-
-**Would you like me to generate a script that automates this entire installation process for new contributors?**
